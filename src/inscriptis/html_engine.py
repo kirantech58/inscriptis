@@ -10,36 +10,7 @@ Guiding principles:
 '''
 
 from inscriptis.css import CSS, CssParse, HtmlElement
-from inscriptis.html_properties import Display, WhiteSpace, Table
-
-class Line(object):
-    '''
-    Object used to represent a line
-    '''
-    __slots__ = ('margin_before', 'margin_after', 'prefix', 'suffix',
-                 'content', 'list_bullet', 'padding')
-
-    def __init__(self):
-        self.margin_before = 0
-        self.margin_after = 0
-        self.prefix = ""
-        self.suffix = ""
-        self.content = ""
-        self.list_bullet = ""
-        self.padding = 0
-
-    def extract_pre_text(self):
-        pass
-
-    def get_text(self):
-        print(">>" + self.content + "<< before: " + str(self.margin_before) + ", after: " + str(self.margin_after) + ", padding: ", self.padding, ", list: ", self.list_bullet)
-        return ''.join(('\n' * self.margin_before,
-                        ' ' * (self.padding - len(self.list_bullet)),
-                        self.list_bullet,
-                        self.prefix,
-                        ' '.join(self.content.split()),
-                        self.suffix,
-                        '\n' * self.margin_after))
+from inscriptis.html_properties import Display, WhiteSpace, Table, Line
 
 
 class Inscriptis(object):
@@ -85,6 +56,7 @@ class Inscriptis(object):
         self.next_line = Line()
         self.clean_text_lines = []
         self.current_table = []
+        self.in_column = []
         self.li_counter = []
         self.li_level = 0
         self.invisible = [] # a list of attributes that are considered invisible
@@ -130,7 +102,7 @@ class Inscriptis(object):
                                                   self.current_tag[-1].margin_before)
             return False
         else:
-            line = self.current_line.get_text()
+            line = str(self.current_line)
             if len(self.current_table) > 0:
                 self.current_table[-1].add_text("|" +line.replace('\n', ' '))
             else:
@@ -244,11 +216,16 @@ class Inscriptis(object):
     def start_td(self, attrs):
         if self.current_table:
             self.current_table[-1].add_column()
+            self.in_column.append(True)
 
     def end_td(self):
-        ''' ends tds and trs '''
         if self.current_table:
+            self.in_column.pop()
             self.write_line(force=True)
+
+    def end_tr(self):
+        if self.current_table:
+            pass
 
     def end_table(self):
         table = self.current_table.pop()
