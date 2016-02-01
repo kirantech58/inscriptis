@@ -32,7 +32,7 @@ class Line(object):
         pass
 
     def get_text(self):
-        # print(">>" + self.content + "<< before: " + str(self.margin_before) + ", after: " + str(self.margin_after) + ", padding: ", self.padding, ", list: ", self.list_bullet)
+        print(">>" + self.content + "<< before: " + str(self.margin_before) + ", after: " + str(self.margin_after) + ", padding: ", self.padding, ", list: ", self.list_bullet)
         return ''.join(('\n' * self.margin_before,
                         ' ' * (self.padding - len(self.list_bullet)),
                         self.list_bullet,
@@ -132,7 +132,7 @@ class Inscriptis(object):
         else:
             line = self.current_line.get_text()
             if len(self.current_table) > 0:
-                self.current_table[-1].add_text(line.replace('\n', ' '))
+                self.current_table[-1].add_text("|" +line.replace('\n', ' '))
             else:
                 self.clean_text_lines.append(line)
 
@@ -238,13 +238,17 @@ class Inscriptis(object):
         self.current_table.append(Table())
 
     def start_tr(self, attrs):
-        self.current_table[-1].add_row()
+        if self.current_table:
+            self.current_table[-1].add_row()
 
     def start_td(self, attrs):
-        self.current_table[-1].add_column()
+        if self.current_table:
+            self.current_table[-1].add_column()
 
     def end_td(self):
-        self.write_line(force=True)
+        ''' ends tds and trs '''
+        if self.current_table:
+            self.write_line(force=True)
 
     def end_table(self):
         table = self.current_table.pop()
