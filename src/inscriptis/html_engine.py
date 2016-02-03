@@ -10,7 +10,8 @@ Guiding principles:
 '''
 
 from inscriptis.css import CSS, CssParse, HtmlElement
-from inscriptis.html_properties import Display, WhiteSpace, Table, Line
+from inscriptis.html_properties import Display, WhiteSpace, Line
+from inscriptis.table_engine import Table
 
 
 class Inscriptis(object):
@@ -103,11 +104,7 @@ class Inscriptis(object):
             return False
         else:
             line = str(self.current_line)
-            if len(self.current_table) > 0:
-                self.current_table[-1].add_text("|" +line.replace('\n', ' '))
-            else:
-                self.clean_text_lines.append(line)
-
+            self.clean_text_lines.append(line)
             self.current_line = self.next_line
             self.next_line = Line()
             return True
@@ -169,7 +166,12 @@ class Inscriptis(object):
         if self.current_tag[-1].whitespace == WhiteSpace.pre:
             data = '\0' + data + '\0'
 
-        self.current_line.content += data
+        # determine whether to add this content to a table column
+        # or to a standard line
+        if self.in_column and self.current_table:
+            self.current_table[len(self.in_column)-1].add_text(data)
+        else:
+            self.current_line.content += data
 
     def start_ul(self, attrs):
         self.li_level += 1
@@ -221,13 +223,13 @@ class Inscriptis(object):
     def end_td(self):
         if self.current_table:
             self.in_column.pop()
-            self.write_line(force=True)
 
     def end_tr(self):
         if self.current_table:
             pass
 
     def end_table(self):
+        self.write_line()
         table = self.current_table.pop()
         self.write_line_verbatim(str(table))
 
