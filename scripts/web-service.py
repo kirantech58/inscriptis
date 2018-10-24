@@ -5,7 +5,7 @@ Inscriptis Web Service
 '''
 
 from flask import request, Response, Flask
-from inscriptis import get_text
+from inscriptis import get_text, get_content
 
 app = Flask(__name__)
 
@@ -38,7 +38,7 @@ def get_content_call():
         encoding = 'UTF-8'
     html_content = request.data.decode(encoding, errors='ignore')
     url = 'http://example.com/'
-    text = get_text(html_content,
+    text = get_content(html_content,
                     url)
     return Response(text, mimetype='text/plain')
 

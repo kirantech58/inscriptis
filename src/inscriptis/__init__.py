@@ -3,7 +3,7 @@ from re import compile
 from lxml.html import fromstring
 
 from inscriptis.html_engine import Inscriptis
-from contentcleanup.text_sweeper import TextSweeper
+from contentCleanup.text_sweeper import TextSweeper
 
 __author__ = "Albert Weichselbraun, Fabian Odoni"
 __copyright__ = "Copyright (C) 2016 Albert Weichselbraun, Fabian Odoni"
