@@ -3,6 +3,7 @@ from re import compile
 from lxml.html import fromstring
 
 from inscriptis.html_engine import Inscriptis
+from contentcleanup.text_sweeper import TextSweeper
 
 __author__ = "Albert Weichselbraun, Fabian Odoni"
 __copyright__ = "Copyright (C) 2016 Albert Weichselbraun, Fabian Odoni"
@@ -32,3 +33,20 @@ def get_text(html_content, display_images=False, deduplicate_captions=False, dis
     html_tree = fromstring(html_content)
     parser = Inscriptis(html_tree, display_images=display_images, deduplicate_captions=deduplicate_captions, display_links=display_links)
     return parser.get_text()
+
+
+def get_content(html_content, url):
+    '''
+    ::param: html_content
+    ::returns:
+        a text representation of the html content.
+    '''
+    result = TextSweeper().parse_html(
+        html_content=html_document,
+        url=url)
+
+    if result is None:
+        return ""
+
+    return result
+    
