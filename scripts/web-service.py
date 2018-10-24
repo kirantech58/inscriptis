@@ -37,10 +37,9 @@ def get_content_call():
     else:
         encoding = 'UTF-8'
     html_content = request.data.decode(encoding, errors='ignore')
+    url = 'test-url'
     text = get_text(html_content,
-                    display_images=True,
-                    deduplicate_captions=True,
-                    display_links=False)
+                    url)
     return Response(text, mimetype='text/plain')
 
 
