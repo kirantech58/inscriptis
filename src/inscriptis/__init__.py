@@ -35,15 +35,18 @@ def get_text(html_content, display_images=False, deduplicate_captions=False, dis
     return parser.get_text()
 
 
-def get_content(html_content, url):
+def get_content(html_content, url, encoding):
     '''
     ::param: html_content
     ::returns:
         a text representation of the html content.
     '''
-    result = TextSweeper().parse_html(
-        html_content=html_document,
-        url=url)
+    print('get_content')
+    for result in TextSweeper().parse_html(
+        html_content=html_content,
+        url=url,
+        encoding=encoding):
+        print(result)
 
     if result is None:
         return ""

@@ -4,8 +4,9 @@
 Inscriptis Web Service
 '''
 
-from flask import request, Response, Flask
+from flask import stream_with_context, request, Response, Flask
 from inscriptis import get_text, get_content
+
 
 app = Flask(__name__)
 
@@ -27,6 +28,7 @@ def get_text_call():
                     display_images=True,
                     deduplicate_captions=True,
                     display_links=False)
+    print (text)
     return Response(text, mimetype='text/plain')
 
 @app.route("/get_content", methods=['POST'])
@@ -39,7 +41,7 @@ def get_content_call():
     html_content = request.data.decode(encoding, errors='ignore')
     url = 'http://example.com/'
     text = get_content(html_content,
-                    url)
+                    url, encoding)
     return Response(text, mimetype='text/plain')
 
 
