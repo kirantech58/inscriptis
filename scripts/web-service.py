@@ -42,6 +42,11 @@ def get_content_call():
     url = 'http://example.com/'
     text = get_content(html_content,
                     url, encoding)
+    if len(text)==0:
+        text = get_text(html_content,
+                    display_images=True,
+                    deduplicate_captions=True,
+                    display_links=False)
     return Response(text, mimetype='text/plain')
 
 

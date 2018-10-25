@@ -57,13 +57,7 @@ def get_content(html_content, url, encoding):
         elif len(result['content'])>0:
             return result['content']
         else:
-            #encoding = 'utf-8'
-            result = get_text(html_content, 
-                display_images=False,
-                deduplicate_captions=False,
-                display_links=False)
-            #print(result)
-            return result
+            return ""
 
     #in theory it should never get here
     return ""
