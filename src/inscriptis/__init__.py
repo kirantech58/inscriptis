@@ -1,9 +1,11 @@
 
+import json
 from re import compile
 from lxml.html import fromstring
 
 from inscriptis.html_engine import Inscriptis
 from contentCleanup.text_sweeper import TextSweeper
+
 
 __author__ = "Albert Weichselbraun, Fabian Odoni"
 __copyright__ = "Copyright (C) 2016 Albert Weichselbraun, Fabian Odoni"
@@ -42,14 +44,27 @@ def get_content(html_content, url, encoding):
         a text representation of the html content.
     '''
     print('get_content')
+    result = ""
     for result in TextSweeper().parse_html(
         html_content=html_content,
         url=url,
         encoding=encoding):
         print(result)
+        
+        if result is None:
+            return ""
+        elif result[u'content']!='':
+            result = get_text(html_content, 
+                display_images=False,
+                deduplicate_captions=False,
+                display_links=False)
+            print(result)
+            return result
+        else:
+            return result[u'content']
 
-    if result is None:
-        return ""
-
-    return result
     
+    return get_text(html_content, 
+                display_images=False,
+                deduplicate_captions=False,
+                display_links=False)
