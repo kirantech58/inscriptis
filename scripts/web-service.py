@@ -41,7 +41,7 @@ def get_content_call():
     html_content = request.data.decode(encoding, errors='ignore')
     url = 'http://example.com/'
     text = get_content(html_content,
-                    url, encoding)
+                    url, encoding)['content']
     return Response(text, mimetype='text/plain')
 
 
