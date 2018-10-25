@@ -28,22 +28,16 @@ def get_text_call():
                     display_images=True,
                     deduplicate_captions=True,
                     display_links=False)
-    print (text)
     return Response(text, mimetype='text/plain')
 
 @app.route("/get_content", methods=['POST'])
 def get_content_call():
-    content_type = request.headers['Content-type']
-    if '; encoding=' in content_type:
-        encoding = content_type.split('; encoding=')[1]
-    else:
-        encoding = 'UTF-8'
-    html_content = request.data.decode(encoding, errors='ignore')
+    html_content = request.data.decode('UTF-8', errors='ignore')
     url = 'http://example.com/'
     text = get_content(html_content,
-                    url, encoding)
+                    url, 'UTF-8')
     if len(text)==0:
-        text = get_text(html_content,
+        text = get_text(request.data,
                     display_images=True,
                     deduplicate_captions=True,
                     display_links=False)

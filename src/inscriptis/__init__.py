@@ -24,6 +24,7 @@ def get_text(html_content, display_images=False, deduplicate_captions=False, dis
     ::returns:
         a text representation of the html content.
     '''
+    print('get_text')
     html_content = html_content.strip()
     if not html_content:
         return ""
@@ -47,7 +48,8 @@ def get_content(html_content, url, encoding):
     result = ""
     for result in TextSweeper().parse_html(
         html_content=html_content,
-        url=url,
+        url=url, 
+        cleanup_rules=None,
         encoding=encoding):
         print(result)
         
